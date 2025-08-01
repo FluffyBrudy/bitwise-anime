@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="/src/styles/input.style.css" />
+    <link rel="stylesheet" href="/src/styles/operator-menu.style.css" />
+    <title>Vite + TS</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="main-container">
+        <div class="inputs">
+          <input class="input-field" type="number" placeholder="Input 1" />
+          <input class="input-field" type="number" placeholder="Input 2" />
+        </div>
+        <div class="operator-menu" id="bitwise-menu">
+          <button class="operator-button">&</button>
+          <button class="operator-button">|</button>
+          <button class="operator-button">^</button>
+          <button class="operator-button">~</button>
+          <button class="operator-button">&lt;&lt;</button>
+          <button class="operator-button">&gt;&gt;</button>
+          <button class="operator-button">&gt;&gt;&gt;</button>
+        </div>
+        <div class="container"></div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
