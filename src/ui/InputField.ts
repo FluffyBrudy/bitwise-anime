@@ -1,5 +1,3 @@
-import "../styles/input.style.css";
-
 interface InputFieldOptions {
   label: string;
   type?: string;

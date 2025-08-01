@@ -2,33 +2,139 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/typescript.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Bitwise Visualizer</title>
     <link rel="stylesheet" href="/src/style.css" />
     <link rel="stylesheet" href="/src/styles/input.style.css" />
     <link rel="stylesheet" href="/src/styles/operator-menu.style.css" />
-    <title>Vite + TS</title>
   </head>
   <body>
     <div id="app">
       <div class="main-container">
-        <div class="inputs">
-          <input class="input-field" type="number" placeholder="Input 1" />
-          <input class="input-field" type="number" placeholder="Input 2" />
+        <header class="header">
+          <h1 class="title">Bitwise Visualizer</h1>
+        </header>
+
+        <div class="controls-section">
+          <div class="input-group">
+            <div class="input-wrapper">
+              <label for="input1">First Number</label>
+              <input
+                type="number"
+                id="input1"
+                class="input-field"
+                placeholder="Enter first number"
+              />
+              <div class="format-display">
+                <span class="format-label">Binary:</span>
+                <span class="format-value" id="bin1">-</span>
+              </div>
+              <div class="format-display">
+                <span class="format-label">Hex:</span>
+                <span class="format-value" id="hex1">-</span>
+              </div>
+            </div>
+
+            <div class="operator-section">
+              <div class="operator-menu" id="bitwise-menu">
+                <button class="operator-button" data-op="&" title="Bitwise AND">
+                  &
+                </button>
+                <button class="operator-button" data-op="|" title="Bitwise OR">
+                  |
+                </button>
+                <button class="operator-button" data-op="^" title="Bitwise XOR">
+                  ^
+                </button>
+                <button class="operator-button" data-op="~" title="Bitwise NOT">
+                  ~
+                </button>
+                <button class="operator-button" data-op="<<" title="Left Shift">
+                  &lt;&lt;
+                </button>
+                <button
+                  class="operator-button"
+                  data-op=">>"
+                  title="Right Shift"
+                >
+                  &gt;&gt;
+                </button>
+                <button
+                  class="operator-button"
+                  data-op=">>>"
+                  title="Unsigned Right Shift"
+                >
+                  &gt;&gt;&gt;
+                </button>
+              </div>
+            </div>
+
+            <div class="input-wrapper">
+              <label for="input2">Second Number</label>
+              <input
+                type="number"
+                id="input2"
+                class="input-field"
+                placeholder="Enter second number"
+              />
+              <div class="format-display">
+                <span class="format-label">Binary:</span>
+                <span class="format-value" id="bin2">-</span>
+              </div>
+              <div class="format-display">
+                <span class="format-label">Hex:</span>
+                <span class="format-value" id="hex2">-</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-panel">
+            <div class="setting-group">
+              <label for="bit-width">Bit Width:</label>
+              <select id="bit-width" class="setting-select">
+                <option value="8">8-bit</option>
+                <option value="16">16-bit</option>
+                <option value="32" selected>32-bit</option>
+              </select>
+            </div>
+            <div class="setting-group">
+              <label for="animation-speed">Speed:</label>
+              <input
+                type="range"
+                id="animation-speed"
+                class="setting-range"
+                min="0.5"
+                max="3"
+                step="0.1"
+                value="1"
+              />
+            </div>
+            <div class="setting-group">
+              <button id="play-btn" class="control-btn">▶ Play</button>
+              <button id="step-btn" class="control-btn">⏭ Step</button>
+              <button id="reset-btn" class="control-btn">🔄 Reset</button>
+            </div>
+          </div>
         </div>
-        <div class="operator-menu" id="bitwise-menu">
-          <button class="operator-button">&</button>
-          <button class="operator-button">|</button>
-          <button class="operator-button">^</button>
-          <button class="operator-button">~</button>
-          <button class="operator-button">&lt;&lt;</button>
-          <button class="operator-button">&gt;&gt;</button>
-          <button class="operator-button">&gt;&gt;&gt;</button>
+
+        <div class="visualization-container" id="visualization">
+          <div class="welcome-message">
+            <h2>Choose an operation to begin</h2>
+            <p>Select a bitwise operator and enter your numbers to visualize</p>
+          </div>
         </div>
-        <div class="container"></div>
+
+        <div class="info-panel" id="info-panel">
+          <div class="info-content">
+            <h3>Operation Info</h3>
+            <p id="operation-description">
+              Select an operation to see its description
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

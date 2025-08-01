@@ -86,10 +86,8 @@ export class TextAnimator {
       const b1 = Number(bits1[i].textContent);
       const b2 = Number(bits2[i].textContent);
 
-      // Scale bits visually
       gsap.to([bits1[i], bits2[i]], { scale: 1.4, duration: 0.2 });
 
-      // Compute bitwise result
       let rBit: number;
       switch (operator) {
         case "&":
@@ -113,18 +111,14 @@ export class TextAnimator {
         { opacity: 1, duration: 0.3, delay: 0.1 }
       );
 
-      // Update decimal display
       const partialDec = decimal(resultArr.join(""));
       decOut.textContent = `= ${partialDec}`;
 
-      // Wait between each bit
       await gsap.to({}, { duration: 0.35 });
 
-      // Scale back original bits
       gsap.to([bits1[i], bits2[i]], { scale: 1.0, duration: 0.2 });
     }
 
-    // Final pulse animation on decimal result
     await gsap.fromTo(
       decOut,
       { scale: 1 },
@@ -164,12 +158,10 @@ export class TextAnimator {
 
     const resultArr = new Array(len).fill("0");
 
-    // Animate bits right to left
     for (let i = len - 1; i >= 0; i--) {
       const b1 = Number(bits1[i].textContent);
       gsap.to(bits1[i], { scale: 1.4, duration: 0.2 });
 
-      // For ~ operator: flip bit
       const rBit = b1 ^ 1;
       resultArr[i] = String(rBit);
 

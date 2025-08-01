@@ -1,47 +1,779 @@
-html,
-body {
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
   height: 100%;
-  font-family: sans-serif;
-  background-color: #111;
-  color: white;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+  color: #ffffff;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 #app {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
 }
 
 .main-container {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
   padding: 2rem;
-  box-sizing: border-box;
-  gap: 1rem;
+  gap: 2rem;
 }
 
-.inputs {
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, #00d4ff, #5c4dff, #ff6b6b);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 30px rgba(92, 77, 255, 0.3);
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #a0a0a0;
+  font-weight: 300;
+}
+
+.controls-section {
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
   width: 100%;
-  max-width: 600px;
-  justify-content: center;
 }
 
-.container {
+.input-group {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.input-wrapper {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.input-wrapper label {
+  display: block;
+  font-size: 0.9rem;
+  color: #a0a0a0;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.input-field {
   width: 100%;
-  max-width: 800px;
-  min-height: 100px;
+  padding: 1rem;
+  font-size: 1.1rem;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-field:focus {
+  border-color: #5c4dff;
+  box-shadow: 0 0 20px rgba(92, 77, 255, 0.3);
+}
+
+.format-display {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  font-family: "Courier New", monospace;
+  font-size: 0.9rem;
+}
+
+.format-label {
+  color: #a0a0a0;
+}
+
+.format-value {
+  color: #00d4ff;
+  font-weight: bold;
+}
+
+.operator-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.operator-menu {
   display: flex;
   flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.operator-button {
+  padding: 1rem 1.5rem;
+  font-size: 1.2rem;
+  font-family: "Courier New", monospace;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.operator-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.operator-button:hover::before {
+  left: 100%;
+}
+
+.operator-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(92, 77, 255, 0.3);
+}
+
+.operator-button.selected {
+  background: linear-gradient(45deg, #5c4dff, #00d4ff);
+  border-color: #ffffff;
+  box-shadow: 0 0 30px rgba(92, 77, 255, 0.5);
+  transform: scale(1.05);
+}
+
+.settings-panel {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.setting-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.setting-group label {
+  font-size: 0.9rem;
+  color: #a0a0a0;
+  white-space: nowrap;
+}
+
+.setting-select,
+.setting-range {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.control-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(45deg, #ff6b6b, #ffa500);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+}
+
+.visualization-container {
+  flex: 1;
+  min-height: 400px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-message {
+  text-align: center;
+  opacity: 0.7;
+}
+
+.welcome-message h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #5c4dff;
+}
+
+.bits-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.bit-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.bit-row.input-row {
+  margin-bottom: 1rem;
+}
+
+.bit-row.result-row {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.bit {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Courier New", monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.bit.active {
+  border-color: #00d4ff;
+  background: rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+  transform: scale(1.1);
+}
+
+.bit.result {
+  background: linear-gradient(45deg, #5c4dff, #00d4ff);
+  border-color: #ffffff;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.bit.one {
+  background: linear-gradient(45deg, #ff6b6b, #ffa500);
+  color: white;
+}
+
+.bit.zero {
+  background: rgba(100, 100, 100, 0.3);
+  color: #a0a0a0;
+}
+
+.operation-display {
+  text-align: center;
+  margin: 2rem 0;
+  padding: 2rem;
+  background: rgba(92, 77, 255, 0.1);
+  border-radius: 16px;
+  border: 1px solid rgba(92, 77, 255, 0.3);
+}
+
+.operation-title {
+  font-size: 1.8rem;
+  color: #5c4dff;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.operation-formula {
+  font-family: "Courier New", monospace;
+  font-size: 1.4rem;
+  color: #00d4ff;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.operation-description {
+  color: #a0a0a0;
+  font-size: 1rem;
+  font-style: italic;
+}
+
+.decimal-result {
+  text-align: center;
+  margin-top: 2rem;
   padding: 1rem;
-  border: 1px solid #444;
+  background: rgba(92, 77, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(92, 77, 255, 0.3);
+}
+
+.decimal-result h3 {
+  color: #5c4dff;
+  margin-bottom: 0.5rem;
+}
+
+.decimal-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #00d4ff;
+  font-family: "Courier New", monospace;
+}
+
+.info-panel {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.info-content h3 {
+  color: #5c4dff;
+  margin-bottom: 1rem;
+}
+
+.info-content p {
+  color: #a0a0a0;
+  line-height: 1.6;
+}
+
+.progress-container {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.progress-label {
+  text-align: center;
+  color: #a0a0a0;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5c4dff, #00d4ff);
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 3px;
+}
+
+.bit-row-container {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bit-label {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #a0a0a0;
+}
+
+.bit-value {
+  color: #00d4ff;
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+}
+
+.result-container {
+  background: rgba(92, 77, 255, 0.1);
+  border-color: rgba(92, 77, 255, 0.3);
+}
+
+.result-label {
+  color: #5c4dff;
+  font-weight: bold;
+}
+
+.operator-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.operator-symbol {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ff6b6b;
+  background: linear-gradient(45deg, #ff6b6b, #ffa500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.operator-line {
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff6b6b, transparent);
+}
+
+.bit {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bit-position {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: #666;
+  font-family: "Courier New", monospace;
+}
+
+.bit-tooltip {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: "Courier New", monospace;
+  z-index: 1000;
+  pointer-events: none;
+  transform: translateX(-50%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.result-panel {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: linear-gradient(
+    135deg,
+    rgba(92, 77, 255, 0.1),
+    rgba(0, 212, 255, 0.1)
+  );
+  border-radius: 20px;
+  border: 2px solid rgba(92, 77, 255, 0.3);
+  box-shadow: 0 20px 40px rgba(92, 77, 255, 0.2);
+}
+
+.result-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.result-header h3 {
+  font-size: 1.8rem;
+  color: #5c4dff;
+  margin: 0;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.result-item {
+  text-align: center;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.result-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 212, 255, 0.2);
+}
+
+.result-format {
+  font-size: 0.9rem;
+  color: #a0a0a0;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.result-value-large {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #00d4ff;
+  font-family: "Courier New", monospace;
+  word-break: break-all;
+}
+
+.result-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.result-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.copy-btn {
+  background: linear-gradient(45deg, #00d4ff, #5c4dff);
+  color: white;
+}
+
+.share-btn {
+  background: linear-gradient(45deg, #ff6b6b, #ffa500);
+  color: white;
+}
+
+.result-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.examples-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.examples-container h3 {
+  text-align: center;
+  color: #5c4dff;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.examples-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.example-btn {
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.example-btn:hover {
+  border-color: #5c4dff;
+  background: rgba(92, 77, 255, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(92, 77, 255, 0.2);
+}
+
+.example-name {
+  font-weight: bold;
+  color: #00d4ff;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.example-formula {
+  font-family: "Courier New", monospace;
+  color: #ff6b6b;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.example-desc {
+  color: #a0a0a0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .input-group {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .settings-panel {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .bit {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1rem;
+  }
+
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-actions {
+    flex-direction: column;
+  }
+
+  .result-btn {
+    width: 100%;
+  }
+
+  .bit-position {
+    display: none;
+  }
+
+  .operation-title {
+    font-size: 1.4rem;
+  }
+
+  .operation-formula {
+    font-size: 1.1rem;
+  }
+
+  .examples-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .examples-container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+}
+
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #5c4dff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #00d4ff;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  z-index: 100;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid #5c4dff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }

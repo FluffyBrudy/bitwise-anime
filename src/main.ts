@@ -1,48 +1,46 @@
-import { TextAnimator } from "./textAnimator";
-import type { TBitwiseOperators } from "./types";
+import { AdvancedBitwiseVisualizer } from "./advancedBitwiseVisualizer";
+import { ParticleSystem } from "./particleSystem";
+import { SoundManager } from "./soundManager";
 
-function bindBitwiseMenu(
-  action: (operator: TBitwiseOperators) => void,
-  inputSecond: HTMLInputElement
-) {
-  const menu = document.getElementById("bitwise-menu");
-  if (!menu) return;
+class App {
+  private particles: ParticleSystem;
 
-  const buttons = menu.querySelectorAll<HTMLButtonElement>(".operator-button");
+  constructor() {
+    new AdvancedBitwiseVisualizer();
+    this.particles = new ParticleSystem();
+    new SoundManager();
 
-  buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-      buttons.forEach((btn) => btn.classList.remove("selected"));
-      button.classList.add("selected");
+    this.init();
+  }
 
-      const op = button.textContent as TBitwiseOperators;
+  private init() {
+    this.particles.init();
 
-      if (op === "~") {
-        inputSecond.disabled = true;
-        inputSecond.value = "";
-      } else {
-        inputSecond.disabled = false;
+    setInterval(() => {
+      this.particles.createAmbientParticle();
+    }, 2000);
+
+    this.setupKeyboardShortcuts();
+  }
+
+  private setupKeyboardShortcuts() {
+    document.addEventListener("keydown", (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        switch (e.key) {
+          case "Enter":
+            e.preventDefault();
+            document.getElementById("play-btn")?.click();
+            break;
+          case "r":
+            e.preventDefault();
+            document.getElementById("reset-btn")?.click();
+            break;
+        }
       }
-
-      action(op);
     });
-  });
+  }
 }
 
-async function main() {
-  const animator = new TextAnimator();
-  const secondInput = document.querySelector<HTMLInputElement>(
-    ".input-field:nth-child(2)"
-  )!;
-
-  bindBitwiseMenu(animator.setAnimationAction.bind(animator), secondInput);
-
-  await animator.animateText(
-    0,
-    false,
-    "Choose an operator",
-    "and enter inputs"
-  );
-}
-
-main();
+document.addEventListener("DOMContentLoaded", () => {
+  new App();
+});
