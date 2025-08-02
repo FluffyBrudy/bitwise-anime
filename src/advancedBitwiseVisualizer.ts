@@ -10,7 +10,7 @@ export class AdvancedBitwiseVisualizer {
   private sounds: SoundManager;
   private currentOperation: TBitwiseOperators | null = null;
   private animationSpeed = 1;
-  private bitWidth = 8;
+  private bitWidth = 32;
   private isAnimating = false;
 
   constructor() {
@@ -394,13 +394,26 @@ export class AdvancedBitwiseVisualizer {
     operator: TBitwiseOperators,
     onProgress?: (progress: number) => void
   ) {
-    const bits1 = Array.from(row1.querySelectorAll(".bit"));
-    const bits2 = row2 ? Array.from(row2.querySelectorAll(".bit")) : [];
+    const bits1 = Array.from<HTMLInputElement>(row1.querySelectorAll(".bit"));
+    const bits2 = row2
+      ? Array.from<HTMLInputElement>(row2.querySelectorAll(".bit"))
+      : [];
     const resultBits = Array.from(resultRow.querySelectorAll(".bit"));
 
     const animationDuration = 0.4 / this.animationSpeed;
     const delayBetweenBits = 0.15 / this.animationSpeed;
     const totalBits = bits1.length;
+
+    let precomputedResultBits: string[] | null = null;
+    if (["<<", ">>", ">>>"].includes(operator)) {
+      const val1 = parseInt(bits1.map((bit) => bit.dataset.value).join(""), 2);
+      const val2 =
+        bits2.length > 0
+          ? parseInt(bits2.map((bit) => bit.dataset.value).join(""), 2)
+          : 0;
+      const result = this.operations.calculate(val1, val2, operator);
+      precomputedResultBits = this.formatBinary(result).split("");
+    }
 
     bits1.forEach((bit, index) => {
       const indicator = document.createElement("div");
@@ -435,20 +448,29 @@ export class AdvancedBitwiseVisualizer {
         bit2.classList.add("active");
       }
 
-      const val1 = Number.parseInt(
-        (bit1 as HTMLInputElement).dataset.value || "0"
-      );
-      const val2 = bit2
-        ? Number.parseInt((bit2 as HTMLInputElement).dataset.value || "0")
-        : 0;
-      const resultValue = this.calculateBitResult(val1, val2, operator);
+      let resultValue: number;
+      let tooltipText: string;
+
+      if (["<<", ">>", ">>>"].includes(operator) && precomputedResultBits) {
+        resultValue = Number(precomputedResultBits[i]);
+        tooltipText = `Result bit: ${resultValue}`;
+      } else {
+        const val1 = Number.parseInt(
+          (bit1 as HTMLInputElement).dataset.value || "0"
+        );
+        const val2 = bit2
+          ? Number.parseInt((bit2 as HTMLInputElement).dataset.value || "0")
+          : 0;
+        resultValue = this.operations.calculate(val1, val2, operator);
+        tooltipText =
+          operator === "~"
+            ? `~${val1} = ${resultValue}`
+            : `${val1} ${operator} ${val2} = ${resultValue}`;
+      }
 
       const tooltip = document.createElement("div");
       tooltip.className = "bit-tooltip";
-      tooltip.textContent =
-        operator === "~"
-          ? `~${val1} = ${resultValue}`
-          : `${val1} ${operator} ${val2} = ${resultValue}`;
+      tooltip.textContent = tooltipText;
       document.body.appendChild(tooltip);
 
       const rect = resultBit.getBoundingClientRect();
@@ -509,25 +531,6 @@ export class AdvancedBitwiseVisualizer {
       repeat: 1,
       stagger: 0.05,
     });
-  }
-
-  private calculateBitResult(
-    bit1: number,
-    bit2: number,
-    operator: TBitwiseOperators
-  ): number {
-    switch (operator) {
-      case "&":
-        return bit1 & bit2;
-      case "|":
-        return bit1 | bit2;
-      case "^":
-        return bit1 ^ bit2;
-      case "~":
-        return bit1 ^ 1;
-      default:
-        return 0;
-    }
   }
 
   private getOperationName(operator: TBitwiseOperators): string {
