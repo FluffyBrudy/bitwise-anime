@@ -1,4 +1,4 @@
-import { AdvancedBitwiseVisualizer } from "./advancedBitwiseVisualizer";
+import { AdvancedBitwiseVisualizer } from "./bitwiseVisualizer";
 import { ParticleSystem } from "./particleSystem";
 import { SoundManager } from "./soundManager";
 
