@@ -148,7 +148,14 @@ export class AdvancedBitwiseVisualizer {
   }
 
   private async playAnimation() {
-    if (this.isAnimating || !this.currentOperation) return;
+    if (this.isAnimating) {
+      alert("wait for animation to end");
+      return;
+    }
+    if (!this.currentOperation) {
+      alert("please choose operator");
+      return;
+    }
 
     const input1 = document.getElementById("input1") as HTMLInputElement;
     const input2 = document.getElementById("input2") as HTMLInputElement;
